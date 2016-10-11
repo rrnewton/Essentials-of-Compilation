@@ -3127,9 +3127,10 @@ association list.
      (lambda (e)
        (define recur (typecheck-R2 env e))
        (match e
-         [(? fixnum?) 'Integer]
+         [(? fixnum?)  'Integer]
          [(? boolean?) 'Boolean]
-         [(? symbol?) (lookup e env)]
+         [(? symbol?)  (lookup e env)]
+         [`(read)      'Integer]
          [`(let ([,x ,(app recur T)]) ,body)
           (define new-env (cons (cons x T) env))
           (typecheck-R2 new-env body)]
@@ -3878,7 +3879,7 @@ if_end21289:
     -Ryan}
 %  \end{document}
 
-  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Tuples and Garbage Collection}
 \label{ch:tuples}
