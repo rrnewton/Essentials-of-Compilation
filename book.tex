@@ -6691,11 +6691,12 @@ The \key{map2} function ...
 \subsection{Testing}
 
 The \key{interp-tests} function takes a compiler name (a string), a
-description of the passes, an interpreter for the source language, a
-test family name (a string), and a list of test numbers, and runs the
-compiler passes and the interpreters to check whether the passes
-correct. The description of the passes is a list with one entry per
-pass.  An entry is a list with three things: a string giving the name
+typechecker (see the comment for check-passes), a description of the
+passes, an interpreter for the source language, a test family name
+(a string), and a list of test numbers, and runs the compiler passes
+and the interpreters to check whether the passes correct.
+The description of the passes is a list with one entry per pass.
+An entry is a list with three things: a string giving the name
 of the pass, the function that implements the pass (a translator from
 AST to AST), and a function that implements the interpreter (a
 function from AST to result value) for the language of the output of
@@ -6707,17 +6708,18 @@ test number, ending in \key{.scm}. Also, for each Scheme program there
 is a file with the same number except that it ends with \key{.in} that
 provides the input for the Scheme program.
 \begin{lstlisting}
-(define (interp-tests name passes test-family test-nums) ...
+(define (interp-tests name typechecker passes test-family test-nums) ...
 \end{lstlisting}
 
-The compiler-tests function takes a compiler name (a string) a
-description of the passes (see the comment for \key{interp-tests}) a
-test family name (a string), and a list of test numbers (see the
-comment for interp-tests), and runs the compiler to generate x86 (a
-\key{.s} file) and then runs gcc to generate machine code.  It runs
-the machine code and checks that the output is 42.
+The compiler-tests function takes a compiler name (a string), a
+typechecker (see the comment for check-passes) a description of
+the passes (ditto), a description of the passes (see the comment for
+\key{interp-tests}), a test family name (a string), and a list of
+test numbers (see the comment for interp-tests), and runs the compiler
+to generate x86 (a \key{.s} file) and then runs gcc to generate
+machine code.  It runs the machine code and checks that the output is 42.
 \begin{lstlisting}
-(define (compiler-tests name passes test-family test-nums) ...)
+(define (compiler-tests name typechecker passes test-family test-nums) ...)
 \end{lstlisting}
 
 The compile-file function takes a description of the compiler passes
