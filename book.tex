@@ -512,7 +512,7 @@ The pattern is not the same thing as a quasiquote expression used to
 \emph{construct} ASTs, however, the similarity is intentional: constructing and
 deconstructing ASTs uses similar syntax.
 %
-While the pattern uses a restricted syntax, 
+While the pattern uses a restricted syntax,
 the body of the match clause may contain any Racket code whatsoever.
 
 
@@ -584,9 +584,9 @@ defined by structural recursion.
       [`(read) #t]
       [`(- ,e) (exp? e)]
       [`(+ ,e1 ,e2)
-       (and (exp? e1) (exp? e2))]))  
+       (and (exp? e1) (exp? e2))]))
   (match sexp
-    [`(program ,e) (exp? e)]    
+    [`(program ,e) (exp? e)]
     [else #f]))
 
 (R0? `(+ (read) (- 8)))
@@ -598,7 +598,7 @@ defined by structural recursion.
 \begin{lstlisting}
 
 
-  
+
 
 
 
@@ -659,7 +659,7 @@ an interpreter for the $R_0$ language, which will also serve as a
 second example of structural recursion. The \texttt{interp-R0}
 function is defined in Figure~\ref{fig:interp-R0}. The body of the
 function is a match on the input program \texttt{p} and
-then a call to the \lstinline{exp} helper function, which in turn has 
+then a call to the \lstinline{exp} helper function, which in turn has
 one match clause per grammar rule for $R_0$ expressions.
 
 The \lstinline{exp} function is naturally recursive: clauses for internal AST
@@ -1268,7 +1268,7 @@ auxiliary data from one step of the compiler to the next. )
              (\key{subq} \; \Arg\; \Arg) \mid
              (\key{movq} \; \Arg\; \Arg) \mid
              (\key{retq})\\
-      &\mid& (\key{negq} \; \Arg) \mid 
+      &\mid& (\key{negq} \; \Arg) \mid
              (\key{callq} \; \mathit{label}) \mid
              (\key{pushq}\;\Arg) \mid
              (\key{popq}\;\Arg) \\
@@ -4912,7 +4912,7 @@ needs to be followed. Thus, we zero-out all locations on the root
 stack in the prelude of \code{main}. In
 Figure~\ref{fig:print-x86-output-gc}, the instruction
 %
-\lstinline{movq $0, (%r15)} 
+\lstinline{movq $0, (%r15)}
 %
 accomplishes this task. The garbage collector tests each root to see
 if it is null prior to dereferencing it.
