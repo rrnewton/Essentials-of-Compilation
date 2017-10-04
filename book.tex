@@ -4703,7 +4703,7 @@ The $\itm{vec}'$ and $\itm{arg}'$ are obtained by recursively
 processing $\itm{vec}$ and $\itm{arg}$.  The move of $\itm{vec}'$ to
 register \code{r11} ensures that offsets are only performed with
 register operands. This requires removing \code{r11} from
-consideration by the register allocating.
+consideration by the register allocator.
 
 We compile the \code{allocate} form to operations on the
 \code{free\_ptr}, as shown below. The address in the \code{free\_ptr}
