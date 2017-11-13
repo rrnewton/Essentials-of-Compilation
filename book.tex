@@ -6337,7 +6337,7 @@ interesting part is in instruction selection.
 We recommend compiling an \key{inject} as follows if the type is
 \key{Integer} or \key{Boolean}.  The \key{salq} instruction shifts the
 destination to the left by the number of bits specified by the source
-($2$) and it preserves the sign of the integer. We use the \key{orq}
+($3$) and it preserves the sign of the integer. We use the \key{orq}
 instruction to combine the tag and the value to form the tagged value.
 \\
 \begin{tabular}{lll}
@@ -6352,7 +6352,7 @@ $\Rightarrow$
 \begin{minipage}{0.5\textwidth}
 \begin{lstlisting}
 (movq |$e'$| |\itm{lhs}'|)
-(salq (int 2) |\itm{lhs}'|)
+(salq (int 3) |\itm{lhs}'|)
 (orq (int |$\itm{tagof}(T)$|) |\itm{lhs}'|)
 \end{lstlisting}
 \end{minipage}
