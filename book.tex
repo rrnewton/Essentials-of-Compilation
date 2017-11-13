@@ -21,6 +21,9 @@
 \newcommand{\black}[1]{{\color{black} #1}}
 \newcommand{\gray}[1]{{\color{lightgray} #1}}
 
+\newcommand{\tagbits}{3} % For consistency
+\newcommand{\tagmask}{7} % 0b111
+
 %% For pictures
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
@@ -6337,7 +6340,7 @@ interesting part is in instruction selection.
 We recommend compiling an \key{inject} as follows if the type is
 \key{Integer} or \key{Boolean}.  The \key{salq} instruction shifts the
 destination to the left by the number of bits specified by the source
-($3$) and it preserves the sign of the integer. We use the \key{orq}
+(\tagbits) and it preserves the sign of the integer. We use the \key{orq}
 instruction to combine the tag and the value to form the tagged value.
 \\
 \begin{tabular}{lll}
@@ -6352,7 +6355,7 @@ $\Rightarrow$
 \begin{minipage}{0.5\textwidth}
 \begin{lstlisting}
 (movq |$e'$| |\itm{lhs}'|)
-(salq (int 3) |\itm{lhs}'|)
+(salq (int |$\tagbits$|) |\itm{lhs}'|)
 (orq (int |$\itm{tagof}(T)$|) |\itm{lhs}'|)
 \end{lstlisting}
 \end{minipage}
@@ -6389,7 +6392,7 @@ Boolean). The following shows the instruction selection for Integer
 and Boolean.  We first check to see if the tag on the tagged value
 matches the tag of the target type $T$. If not, we halt the program by
 calling the \code{exit} function. If we have a match, we need to
-produce an untagged value by shifting it to the right by 2 bits.
+produce an untagged value by shifting it to the right by $\tagbits$ bits.
 %
 \\
 \begin{tabular}{lll}
@@ -6404,22 +6407,26 @@ $\Rightarrow$
 \begin{minipage}{0.5\textwidth}
 \begin{lstlisting}
 (movq |$e'$| |\itm{lhs}'|)
-(andq (int 3) |\itm{lhs}'|)
+(andq (int |$\tagmask$|) |\itm{lhs}'|)
 (if (eq? |\itm{lhs}'| (int |$\itm{tagof}(T)$|))
     ((movq |$e'$| |\itm{lhs}'|)
-     (sarq (int 2) |\itm{lhs}'|))
+     (sarq (int |$\tagbits$|) |\itm{lhs}'|))
     ((callq exit)))
 \end{lstlisting}
 \end{minipage}
 \end{tabular}  \\
 %
+Here we use the constant $\tagmask$, together with \key{andq}, to {\em mask} off
+only the low bits (i.e., extract the tag).
+
+
 The case for vectors and procedures begins in a similar way, checking
 that the runtime tag matches the target type $T$ and exiting if there
 is a mismatch. However, the way in which we convert the tagged value
 to a value is different, as there is no need to shift. Instead we need
-to zero-out the rightmost 2 bits. We accomplish this by creating the
-bit pattern $\ldots 0011$, applying \code{notq} to obtain $\ldots
-1100$, and then applying \code{andq} with the tagged value get the
+to zero-out the rightmost $\tagbits$ bits. We accomplish this by creating the
+bit pattern $00{\ldots}00111$, applying \code{notq} to obtain
+$11{\ldots}11000$, and then applying \code{andq} with the tagged value get the
 desired result. \\
 %
 \begin{tabular}{lll}
@@ -6434,9 +6441,9 @@ $\Rightarrow$
 \begin{minipage}{0.5\textwidth}
 \begin{lstlisting}
 (movq |$e'$| |\itm{lhs}'|)
-(andq (int 3) |\itm{lhs}'|)
+(andq (int |$\tagmask$|) |\itm{lhs}'|)
 (if (eq? |\itm{lhs}'| (int |$\itm{tagof}(T)$|))
-    ((movq (int 3) |\itm{lhs}'|)
+    ((movq (int |$\tagmask$|) |\itm{lhs}'|)
      (notq |\itm{lhs}'|)
      (andq |$e'$| |\itm{lhs}'|))
     ((callq exit)))
